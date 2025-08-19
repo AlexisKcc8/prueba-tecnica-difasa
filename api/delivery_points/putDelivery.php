@@ -14,14 +14,6 @@
             ]);
             exit;
         }
-//         {
-//   "id": 4,
-//   "id_ruta":5,
-//   "direccion":"Ruta 87: Santiago- Clínica Esperanza- Petronila",
-//   "orden":1000,
-//   "entregado":"Pendiente"
-  
-// }
         $id = trim($data["id"] ?? '');
         $id_ruta = trim($data["id_ruta"] ?? '');
         $direccion = trim($data["direccion"] ?? '');

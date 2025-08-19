@@ -83,7 +83,7 @@ export async function addDriver() {
 
   try {
     const response = await fetch(
-      "http://localhost/prueba-tecnica-difasa/api/driver/postDrivers.php",
+      "http://localhost/prueba-tecnica-difasa/api/driver/postDriver.php",
       {
         method: "POST",
         headers: {
@@ -150,7 +150,7 @@ async function editDriver(chofer) {
 
   try {
     const response = await fetch(
-      "http://localhost/prueba-tecnica-difasa/api/driver/putDrivers.php",
+      "http://localhost/prueba-tecnica-difasa/api/driver/putDriver.php",
       {
         method: "PUT",
         headers: {
@@ -165,7 +165,6 @@ async function editDriver(chofer) {
     );
 
     const result = await response.json();
-    console.log(result);
 
     if (result.Insertado) {
       alert("Chofer actualizado correctamente.");

@@ -93,18 +93,19 @@ export async function addNewDelivery() {
 }
 
 async function editPoint(delivery) {
-  const nuevoIdRuta = prompt("Editar id ruta del delivery:", delivery.id_ruta);
-  const nuevoDireccion = prompt("Editar direccion:", delivery.direccion);
-  const orden = prompt("Editar direccion:", delivery.orden);
-  const entregado = prompt("Editar entrega:", delivery.entregado);
+  console.log("Parametro delivery", delivery);
+  const nuevaIdRuta = prompt("Nuevo id ruta:", delivery.id_ruta);
+  const nuevaDireccion = prompt("Nueva direccion:", delivery.direccion);
+  const nuevaOrden = prompt("Nueva Orden:", delivery.orden);
+  const nuevoEstado = prompt("Entregado?", delivery.entregado);
 
   if (
-    nuevoIdRuta === null ||
-    nuevoDireccion === null ||
-    orden === null ||
-    entregado === null
+    nuevaIdRuta === null ||
+    nuevaDireccion === null ||
+    nuevaOrden === null ||
+    nuevoEstado === null
   )
-    return; // Cancelado
+    return;
 
   try {
     const response = await fetch(
@@ -116,10 +117,10 @@ async function editPoint(delivery) {
         },
         body: JSON.stringify({
           id: delivery.id,
-          id_ruta: nuevoIdRuta,
-          direccion: nuevoDireccion,
-          orden: orden,
-          entregado: entregado,
+          id_ruta: nuevaIdRuta,
+          direccion: nuevaDireccion,
+          orden: nuevaOrden,
+          entregado: nuevoEstado,
         }),
       }
     );
@@ -129,7 +130,7 @@ async function editPoint(delivery) {
 
     if (result.Insertado) {
       alert("delivery actualizado correctamente.");
-      fetchAndRenderdeliveryes();
+      renderDelivery();
     } else {
       alert("Error al actualizar el delivery.");
     }

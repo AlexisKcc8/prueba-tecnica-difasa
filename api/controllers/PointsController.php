@@ -27,7 +27,7 @@
         public static function get_all_deliverys(){
             $database = new Database();
             $conn = $database->getConnection();
-            $stmt = $conn->prepare('SELECT * FROM puntos_entrega');
+            $stmt = $conn->prepare('SELECT * FROM puntos_entrega ORDER BY created_at DESC');
             if ($stmt->execute()) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los datos como array asociativo
             } else {

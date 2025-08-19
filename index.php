@@ -100,8 +100,8 @@
             id="ruta_entregada" 
             class="border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 transition"
           >
-            <option value="pendiente">Pendiente</option>
-            <option value="entregado">Entregado</option>
+            <option value="no">Pendiente</option>
+            <option value="si">Entregado</option>
           </select>
         </div>
         <button 
