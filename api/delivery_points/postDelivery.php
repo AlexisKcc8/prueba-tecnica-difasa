@@ -2,7 +2,7 @@
 
     header('Content-Type: application/json; charset=UTF-8');
 
-    require_once('../../includes/delivery_points.class.php');
+    require_once('../controllers/PointsController.php');
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $data = json_decode(file_get_contents("php://input"), true);
@@ -16,14 +16,14 @@
         }
 
         $id_ruta = (int)$data["id_ruta"] ?? 0;;
-        $dirrecion =  $nombre = trim($data["dirrecion"] ?? '');
-        $orden =  $nombre = (int)$data["orden"] ?? '';
-        $entregado =  $nombre = trim($data["entregado"] ?? '');
+        $direccion = trim($data["direccion"] ?? '');
+        $orden = (int)$data["orden"] ?? '';
+        $entregado = trim($data["entregado"] ?? '');
 
         if(empty($id_ruta)) $errores[] = "El id de la ruta es obligatorio";
-        if(empty($dirrecion)) $errores[] = "La dirrecion de la ruta es obligatorio";
-        if(empty($dirrecion)) $errores[] = "La dirrecion de la ruta es obligatorio";
-        if(empty($dirrecion)) $errores[] = "La dirrecion de la ruta es obligatorio";
+        if(empty($direccion)) $errores[] = "La direccion de la ruta es obligatorio";
+        if(empty($orden)) $errores[] = "El orden de la ruta es obligatorio";
+        if(empty($entregado)) $errores[] = "La entrega de la ruta es obligatorio";
 
         if(!empty($errores)){
             header('HTTP/1.1 400 Bad Request');
@@ -35,7 +35,7 @@
             exit;
         } 
     
-        $result = DeliveryPoints::create_delivery($id_ruta, $dirrecion, $orden, $entregado);
+        $result = PointsController::create_delivery($id_ruta, $direccion, $orden, $entregado);
         header('HTTP/1.1 201 Punto de entrega creada correctamente');
         echo json_encode([
             "Insertado" => $result,

@@ -1,7 +1,8 @@
 <?php
-    require_once('Database.class.php');
+    require_once('../../includes/database.class.php');
 
-    class Driver{
+    class DriversController{
+
         public static function create_driver($nombre, $telefono){
             $database = new Database();
             $conn = $database->getConnection();
@@ -9,8 +10,8 @@
             $stmt = $conn->prepare('INSERT INTO choferes(nombre, telefono) VALUES(:nombre, :telefono)');
             $stmt->bindParam(':nombre',$nombre , PDO::PARAM_STR);
             $stmt->bindParam(':telefono',$telefono, PDO::PARAM_STR);
-
             return $stmt->execute();
+            
         }
 
         public static function delete_driver_by_id($id){
@@ -25,7 +26,7 @@
         public static function get_all_drivers(){
             $database = new Database();
             $conn = $database->getConnection();
-            $stmt = $conn->prepare('SELECT * FROM choferes');
+            $stmt = $conn->prepare('SELECT * FROM choferes ORDER BY created_at DESC');
             if ($stmt->execute()) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los datos como array asociativo
             } else {
@@ -43,7 +44,11 @@
             $stmt->bindParam(':telefono',$telefono, PDO::PARAM_STR);
 
 
-            return $stmt->execute();
+            if ($stmt->execute()) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los datos como array asociativo
+            } else {
+                return []; // o puedes lanzar una excepción o retornar false
+            }
         }
     }
 

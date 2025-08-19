@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,11 +25,14 @@
           class="border border-gray-300 rounded-md p-3 flex-1 mb-4 md:mb-0 focus:ring-2 focus:ring-blue-500 transition"
         />
         <input 
-          type="number" 
+          type="text" 
           name="phoneDriver" 
           id="driverPhone" 
           placeholder="Teléfono del Chofer" 
           required 
+          pattern="[0-9]{10}" 
+          maxlength="10"
+          title="El número debe tener exactamente 10 dígitos"
           class="border border-gray-300 rounded-md p-3 flex-1 mb-4 md:mb-0 focus:ring-2 focus:ring-blue-500 transition"
         />
         <button 
@@ -52,14 +56,10 @@
           required 
           class="border border-gray-300 rounded-md p-3 flex-1 mb-4 md:mb-0 focus:ring-2 focus:ring-blue-500 transition"
         />
-        <input 
-          type="number" 
-          name="id_chofer" 
-          id="id_chofer" 
-          placeholder="Ingrese el id del chofer" 
-          required 
-          class="border border-gray-300 rounded-md p-3 flex-1 mb-4 md:mb-0 focus:ring-2 focus:ring-blue-500 transition"
-        />
+        <label for="chofer">Chofer:</label>
+        <select id="chofer" name="id_chofer" required>
+            <option value="">-- Selecciona un chofer --</option>
+        </select>
         <button 
           type="submit" 
           class="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
@@ -73,14 +73,10 @@
     <section>
       <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b-2 border-blue-600 inline-block pb-1">Formulario de Puntos de entrega</h2>
       <form id="form_delivery_point" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-        <input 
-          type="number" 
-          name="id_ruta" 
-          id="id_ruta" 
-          placeholder="Ingrese el id de la ruta" 
-          required 
-          class="border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500 transition"
-        />
+        <select id="id_ruta" name="id_ruta" required>
+            <option value="" aria-placeholder="ruta">-- Selecciona una ruta --</option>
+        </select>
+        
         <input 
           type="text" 
           name="dirrecion" 
@@ -129,7 +125,7 @@
       <template id="chofer-template">
         <div class="chofer-card bg-white rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition">
           <div>
-            <p class="text-sm text-gray-500 mb-1"><strong>Id:</strong> <span class="idDrive"></span></p>
+            <p class="text-sm text-gray-500 mb-1"><strong>Id del chofer:</strong> <span class="idDrive"></span></p>
             <h3 class="driverName text-lg font-semibold text-gray-900 mb-2"></h3>
             <p class="text-gray-700"><strong>Teléfono:</strong> <span class="driverPhone"></span></p>
           </div>
@@ -143,18 +139,22 @@
 
     <!-- Rutas -->
     <section>
-      <h2 class="text-2xl font-extrabold text-blue-700 mb-6">Rutas registradas</h2>
+      <h2 class="text-2xl font-extrabold text-blue-700 mb-6">Lista De Rutas registradas</h2>
       <div id="rutas-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 
       <template id="ruta-template">
-        <div class="ruta-card bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition">
+        <div class="ruta-card p-6 rounded-lg shadow-md transition transform hover:-translate-y-1 hover:shadow-xl">
           <p class="text-sm text-gray-500 mb-1"><strong>Id_Ruta:</strong> <span class="idRoute"></span></p>
-          <h3 class="rutaNombre text-lg font-semibold text-gray-900 mb-2"></h3>
+          <h3 class="rutaNombre text-lg font-semibold mb-2"></h3>
           <p class="text-gray-700"><strong>Fecha:</strong> <span class="rutaFecha"></span></p>
-          <p class="text-gray-700"><strong>Id del chofer:</strong> <span class="rutaIdChofer"></span></p>
+          <div class="flex gap-2">
+            <h3 class="text-gray-700"><strong>Chofer Asignado:</strong></h3>
+            <p class="rutaNameChofer"></p>
+          </div>
+          <p class="text-sm text-gray-500 mb-1"><strong>Id del chofer:</strong> <span class="rutaIdChofer"></span></p>
           <div class="mt-4 flex gap-3">
-            <button class="btn-edit-route bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition">Editar</button>
-            <button class="btn-delete-route bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition">Eliminar</button>
+            <button class="btn-edit-route bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-md font-medium transition">Editar</button>
+            <button class="btn-delete-route bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-md font-medium transition">Eliminar</button>
           </div>
         </div>
       </template>

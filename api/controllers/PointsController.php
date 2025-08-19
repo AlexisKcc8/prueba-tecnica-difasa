@@ -1,14 +1,14 @@
 <?php
-    require_once('Database.class.php');
+    require_once('../../includes/database.class.php');
 
-    class DeliveryPoints{
-        public static function create_delivery($id_ruta, $dirrecion, $orden, $entregado){
+    class PointsController{
+        public static function create_delivery($id_ruta, $direccion, $orden, $entregado){
             $database = new Database();
             $conn = $database->getConnection();
 
-            $stmt = $conn->prepare('INSERT INTO puntos_entrega(id_ruta, dirrecion, orden, entregado) VALUES(:id_ruta, :dirrecion, :orden, :entregado)');
+            $stmt = $conn->prepare('INSERT INTO puntos_entrega(id_ruta, direccion, orden, entregado) VALUES(:id_ruta, :direccion, :orden, :entregado)');
             $stmt->bindParam(':id_ruta',$id_ruta , PDO::PARAM_STR);
-            $stmt->bindParam(':dirrecion',$dirrecion, PDO::PARAM_STR);
+            $stmt->bindParam(':direccion',$direccion, PDO::PARAM_STR);
             $stmt->bindParam(':orden',$orden, PDO::PARAM_INT);
             $stmt->bindParam(':entregado',$entregado, PDO::PARAM_STR);
 
@@ -35,14 +35,14 @@
             }
         }
 
-        public static function update_delivery($id, $id_ruta, $dirrecion, $orden, $entregado){
+        public static function update_delivery($id, $id_ruta, $direccion, $orden, $entregado){
             $database = new Database();
             $conn = $database->getConnection();
 
-            $stmt = $conn->prepare('UPDATE puntos_entrega SET id_ruta=:id_ruta, dirrecion=:dirrecion orden=:orden, entregado=:entregado WHERE id=:id');
+            $stmt = $conn->prepare('UPDATE puntos_entrega SET id_ruta=:id_ruta, direccion=:direccion, `orden`=:orden, entregado=:entregado WHERE id=:id');
             $stmt->bindParam(':id',$id , PDO::PARAM_INT);
             $stmt->bindParam(':id_ruta',$id_ruta , PDO::PARAM_STR);
-            $stmt->bindParam(':dirrecion',$dirrecion, PDO::PARAM_STR);
+            $stmt->bindParam(':direccion',$direccion, PDO::PARAM_STR);
             $stmt->bindParam(':orden',$orden, PDO::PARAM_INT);
             $stmt->bindParam(':entregado',$entregado, PDO::PARAM_STR);
 

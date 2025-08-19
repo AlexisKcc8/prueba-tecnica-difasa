@@ -2,12 +2,12 @@
 
 header('Content-Type: application/json; charset=UTF-8');
 
-require_once('../../includes/delivery_points.class.php');
+require_once('../controllers/PointsController.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Obtener las rutas de la base de datos
-    $result = DeliveryPoints::get_all_deliverys();
+    $result = PointsController::get_all_deliverys();
 
     // Enviar encabezado 200 OK
     http_response_code(200);

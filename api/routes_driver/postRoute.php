@@ -2,7 +2,7 @@
 
     header('Content-Type: application/json; charset=UTF-8');
 
-    require_once('../../includes/drivers.class.php');
+    require_once('../controllers/RoutesController.php');
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $data = json_decode(file_get_contents("php://input"), true);
@@ -16,10 +16,10 @@
         }
 
         $nombre = trim($data["nombre"] ?? '');
-        $telefono = trim($data["telefono"] ?? '');
+        $id_chofer = (int)$data["id_chofer"] ?? 0;
 
-        if(empty($nombre)) $errores[] = "El nombre del chofer es obligatorio";
-        if(empty($telefono)) $errores[] = "El telefono del chofer es obligatorio";
+        if(empty($nombre)) $errores[] = "El nombre de la ruta es obligatorio";
+        if(empty($id_chofer)) $errores[] = "El id del chofer es obligatorio";
 
         if(!empty($errores)){
             header('HTTP/1.1 400 Bad Request');
@@ -31,11 +31,11 @@
             exit;
         } 
     
-        $result = Driver::create_driver($nombre, $telefono);
-        header('HTTP/1.1 201 Chofer creado correctamente');
+        $result = RoutesController::create_route($nombre, $id_chofer);
+        header('HTTP/1.1 201 Ruta creada correctamente');
         echo json_encode([
             "Insertado" => $result,
-            "message" => "Chofer creado correctamente"
+            "message" => "Ruta creada correctamente"
         ]);
         exit;
     }

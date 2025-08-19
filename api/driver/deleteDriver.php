@@ -1,7 +1,7 @@
 <?php 
 
 header('Content-Type: application/json; charset=UTF-8');
-require_once('../../includes/drivers.class.php');
+require_once('../controllers/DriverController.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         exit;
     }
 
-    $result = Driver::delete_driver_by_id($id);
+    $result = DriversController::delete_driver_by_id($id);
 
     if ($result) {
         http_response_code(200);

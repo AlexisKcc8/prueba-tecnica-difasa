@@ -1,14 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndRenderChoferes();
-  document.getElementById("form_drivers")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    await addChofer();
-  });
-  
+  loadDriverSelectOptions();
+  document
+    .getElementById("form_drivers")
+    ?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await addChofer();
+    });
 });
 
+async function loadDriverSelectOptions(choferes) {
+  const selectChofer = document.getElementById("chofer");
+  // Limpiar opciones existentes excepto la opción por defecto
+  selectChofer.innerHTML =
+    '<option value="">-- Selecciona un chofer --</option>';
+  try {
+    const res = await fetch("/prueba-tecnica-difasa/api/driver/getDrivers.php");
+    if (!res.ok) throw new Error("Error al cargar choferes");
+    const choferes = await res.json();
+
+    choferes.data.forEach((chofer) => {
+      const option = document.createElement("option");
+      option.value = chofer.id;
+      option.textContent = chofer.nombre;
+      selectChofer.appendChild(option);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
 async function fetchAndRenderChoferes() {
-  const endpoint = "http://localhost/prueba-tecnica-difasa/api/driver/getDrivers.php";
+  const endpoint =
+    "http://localhost/prueba-tecnica-difasa/api/driver/getDrivers.php";
   const container = document.getElementById("choferes-container");
   const template = document.getElementById("chofer-template");
 
@@ -25,10 +48,11 @@ async function fetchAndRenderChoferes() {
 
     container.innerHTML = "";
 
-    data.data.forEach(chofer => {
+    data.data.forEach((chofer) => {
       const clone = template.content.cloneNode(true);
       clone.querySelector(".idDrive").textContent = chofer.id;
-      clone.querySelector(".driverName").textContent = "Chofer: " + chofer.nombre;
+      clone.querySelector(".driverName").textContent =
+        "Chofer: " + chofer.nombre;
       clone.querySelector(".driverPhone").textContent = chofer.telefono;
 
       // Botón eliminar
@@ -41,13 +65,11 @@ async function fetchAndRenderChoferes() {
 
       container.appendChild(clone);
     });
-
   } catch (error) {
     console.error("Error al obtener los choferes:", error);
     container.innerHTML = `<p style="color:red;">No se pudieron cargar los choferes.</p>`;
   }
 }
-
 
 export async function addChofer() {
   const nombre = document.getElementById("driverName").value.trim();
@@ -59,26 +81,31 @@ export async function addChofer() {
   }
 
   try {
-    const response = await fetch("http://localhost/prueba-tecnica-difasa/api/driver/addDriver.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ nombre, telefono })
-    });
+    const response = await fetch(
+      "http://localhost/prueba-tecnica-difasa/api/driver/postDrivers.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre, telefono }),
+      }
+    );
 
     const data = await response.json();
 
     if (data.Insertado) {
       alert("Chofer agregado correctamente.");
       fetchAndRenderChoferes(); // recargar lista
+      loadDriverSelectOptions();
       // Limpiar campos del formulario
       document.getElementById("driverName").value = "";
       document.getElementById("driverPhone").value = "";
     } else {
-      alert("Error al agregar chofer: " + (data.message || "Error desconocido."));
+      alert(
+        "Error al agregar chofer: " + (data.message || "Error desconocido.")
+      );
     }
-
   } catch (error) {
     console.error("Error al agregar chofer:", error);
     alert("No se pudo agregar el chofer.");
@@ -86,19 +113,25 @@ export async function addChofer() {
 }
 
 async function deleteDriver(id) {
-  const confirmed = confirm("¿Estás seguro de que deseas eliminar este chofer?");
+  const confirmed = confirm(
+    "¿Estás seguro de que deseas eliminar este chofer?"
+  );
   if (!confirmed) return;
 
   try {
-    const response = await fetch(`http://localhost/prueba-tecnica-difasa/api/driver/deleteDriver.php?id=${id}`, {
-      method: "DELETE"
-    });
+    const response = await fetch(
+      `http://localhost/prueba-tecnica-difasa/api/driver/deleteDriver.php?id=${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     const data = await response.json();
 
     if (data.success) {
       alert("Chofer eliminado correctamente.");
       fetchAndRenderChoferes(); // Recargar lista
+      loadDriverSelectOptions();
     } else {
       alert("Error al eliminar el chofer.");
     }
@@ -107,7 +140,6 @@ async function deleteDriver(id) {
     alert("No se pudo eliminar el chofer.");
   }
 }
-
 
 /**
  * Muestra un prompt para editar al chofer y lo actualiza
@@ -119,27 +151,30 @@ async function editChofer(chofer) {
   if (nuevoNombre === null || nuevoTelefono === null) return; // Cancelado
 
   try {
-    const response = await fetch("http://localhost/prueba-tecnica-difasa/api/driver/updateDriver.php", {
-      method: "PUT", // o "PUT" según tu backend
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: chofer.id,
-        nombre: nuevoNombre,
-        telefono: nuevoTelefono
-      })
-    });
+    const response = await fetch(
+      "http://localhost/prueba-tecnica-difasa/api/driver/putDriver.php",
+      {
+        method: "PUT", // o "PUT" según tu backend
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: chofer.id,
+          nombre: nuevoNombre,
+          telefono: nuevoTelefono,
+        }),
+      }
+    );
 
     const result = await response.json();
 
     if (result.Insertado) {
       alert("Chofer actualizado correctamente.");
       fetchAndRenderChoferes();
+      loadDriverSelectOptions();
     } else {
       alert("Error al actualizar el chofer.");
     }
-
   } catch (error) {
     console.error("Error al actualizar chofer:", error);
     alert("No se pudo actualizar el chofer.");

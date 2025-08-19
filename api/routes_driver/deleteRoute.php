@@ -1,7 +1,7 @@
 <?php 
 
 header('Content-Type: application/json; charset=UTF-8');
-require_once('../../includes/routes.class.php');
+require_once('../controllers/RoutesController.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         exit;
     }
 
-    $result = Routes::delete_route_by_id($id);
+    $result = RoutesController::delete_route_by_id($id);
 
     if ($result) {
         http_response_code(200);

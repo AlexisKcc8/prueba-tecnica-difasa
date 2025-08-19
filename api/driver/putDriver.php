@@ -2,7 +2,7 @@
 
     header('Content-Type: application/json; charset=UTF-8');
 
-    require_once('../../includes/drivers.class.php');
+    require_once('../controllers/DriverController.php');
 
     if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         $data = json_decode(file_get_contents("php://input"), true);
@@ -33,7 +33,7 @@
             exit;
         } 
     
-        $result = Driver::update_driver($id, $nombre, $telefono);
+        $result = DriversController::update_driver($id, $nombre, $telefono);
         header('HTTP/1.1 201 Chofer creado correctamente');
         echo json_encode([
             "Insertado" => $result,

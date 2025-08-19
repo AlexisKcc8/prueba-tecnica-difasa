@@ -2,12 +2,12 @@
 
 header('Content-Type: application/json; charset=UTF-8');
 
-require_once('../../includes/routes.class.php');
+require_once('../controllers/RoutesController.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Obtener las rutas de la base de datos
-    $result = Routes::get_all_routes();
+    $result = RoutesController::get_all_routes();
 
     // Enviar encabezado 200 OK
     http_response_code(200);

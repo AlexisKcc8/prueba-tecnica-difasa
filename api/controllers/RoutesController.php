@@ -1,7 +1,7 @@
 <?php
-    require_once('Database.class.php');
+    require_once('../../includes/database.class.php');
 
-    class Routes{
+    class RoutesController{
         public static function create_route($nombre, $id_chofer){
             $database = new Database();
             $conn = $database->getConnection();
@@ -25,7 +25,15 @@
         public static function get_all_routes(){
             $database = new Database();
             $conn = $database->getConnection();
-            $stmt = $conn->prepare('SELECT * FROM rutas');
+            $stmt = $conn->prepare('SELECT 
+                    rutas.id, 
+                    rutas.nombre, 
+                    rutas.fecha, 
+                    rutas.id_chofer, 
+                    choferes.nombre AS chofer_nombre
+                FROM rutas 
+                LEFT JOIN choferes ON rutas.id_chofer = choferes.id 
+                ORDER BY rutas.created_at DESC');
             if ($stmt->execute()) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los datos como array asociativo
             } else {

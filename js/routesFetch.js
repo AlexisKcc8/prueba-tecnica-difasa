@@ -1,17 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   renderRoutes();
-  document.getElementById("form_routes")?.addEventListener("submit", async (e) => {
+  document
+    .getElementById("form_routes")
+    ?.addEventListener("submit", async (e) => {
       e.preventDefault();
       await addNewRoute();
     });
 });
 
-
 async function renderRoutes() {
-  const endpoint = "http://localhost/prueba-tecnica-difasa/api/routes_driver/getRoutes.php";
+  const endpoint =
+    "http://localhost/prueba-tecnica-difasa/api/routes_driver/getRoutes.php";
   const container = document.getElementById("rutas-container");
   const template = document.getElementById("ruta-template");
-
+  const coloresFondo = [
+    "bg-white",
+    "bg-blue-50",
+    "bg-green-50",
+    "bg-yellow-50",
+    "bg-pink-50",
+  ];
   try {
     const response = await fetch(endpoint);
 
@@ -25,11 +33,16 @@ async function renderRoutes() {
 
     container.innerHTML = "";
 
-    data.data.forEach(route => {
+    data.data.forEach((route, index) => {
       const clone = template.content.cloneNode(true);
+      clone
+        .querySelector(".ruta-card")
+        .classList.add(coloresFondo[index % coloresFondo.length]);
+      clone.querySelector(".idRoute").textContent = route.id;
       clone.querySelector(".rutaNombre").textContent = route.nombre;
       clone.querySelector(".rutaFecha").textContent = route.fecha;
       clone.querySelector(".rutaIdChofer").textContent = route.id_chofer;
+      clone.querySelector(".rutaNameChofer").textContent = route.chofer_nombre;
 
       // Botón eliminar
       const btnDelete = clone.querySelector(".btn-delete-route");
@@ -41,7 +54,6 @@ async function renderRoutes() {
 
       container.appendChild(clone);
     });
-
   } catch (error) {
     console.error("Error al obtener las rutas:", error);
     container.innerHTML = `<p style="color:red;">No se pudieron cargar las rutas.</p>`;
@@ -50,7 +62,9 @@ async function renderRoutes() {
 
 export async function addNewRoute() {
   const nombre = document.getElementById("nameRoute").value.trim();
-  const id_chofer = document.getElementById("id_chofer").value.trim();
+  const id_chofer = document.getElementById("chofer").value.trim();
+
+  console.log(nombre, id_chofer);
 
   if (!nombre || !id_chofer) {
     alert("Todos los campos son obligatorios.");
@@ -58,25 +72,27 @@ export async function addNewRoute() {
   }
 
   try {
-    const response = await fetch("http://localhost/prueba-tecnica-difasa/api/routes_driver/addRoute.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ nombre, id_chofer })
-    });
+    const response = await fetch(
+      "http://localhost/prueba-tecnica-difasa/api/routes_driver/postRoute.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre, id_chofer }),
+      }
+    );
 
     const data = await response.json();
 
     if (data.Insertado) {
       alert("Ruta agregada correctamente.");
-      renderRoutes(); 
+      renderRoutes();
       document.getElementById("nameRoute").value = "";
-      document.getElementById("id_chofer").value = "";
+      document.getElementById("chofer").value = "";
     } else {
       alert("Error al agregar ruta: " + (data.message || "Error desconocido."));
     }
-
   } catch (error) {
     console.error("Error al agregar ruta:", error);
     alert("No se pudo agregar la ruta.");
@@ -88,9 +104,12 @@ async function deleteRoute(id) {
   if (!confirmed) return;
 
   try {
-    const response = await fetch(`http://localhost/prueba-tecnica-difasa/api/routes_driver/deleteRoute.php?id=${id}`, {
-      method: "DELETE"
-    });
+    const response = await fetch(
+      `http://localhost/prueba-tecnica-difasa/api/routes_driver/deleteRoute.php?id=${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     const data = await response.json();
 
@@ -113,18 +132,21 @@ async function updateRoutes(chofer) {
   if (nuevoNombre === null || id_chofer === null) return;
 
   try {
-    const response = await fetch("http://localhost/prueba-tecnica-difasa/api/routes_driver/updateRoute.php", {
-      method: "PUT", // o "PUT" según tu backend
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: chofer.id,
-        nombre: nuevoNombre,
-        id_chofer: id_chofer,
-        fecha: new Date().toISOString()
-      })
-    });
+    const response = await fetch(
+      "http://localhost/prueba-tecnica-difasa/api/routes_driver/putRoute.php",
+      {
+        method: "PUT", // o "PUT" según tu backend
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: chofer.id,
+          nombre: nuevoNombre,
+          id_chofer: id_chofer,
+          fecha: new Date().toISOString(),
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -134,10 +156,8 @@ async function updateRoutes(chofer) {
     } else {
       alert("Error al actualizar la ruta.");
     }
-
   } catch (error) {
     console.error("Error al actualizar ruta:", error);
     alert("No se pudo actualizar el chofer.");
   }
 }
-
