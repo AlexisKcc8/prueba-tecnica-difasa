@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   renderDelivery();
-  loadPointSelectOptions();
+
   document
     .getElementById("form_delivery_point")
     ?.addEventListener("submit", async (e) => {
@@ -8,28 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
       await addNewDelivery();
     });
 });
-
-async function loadPointSelectOptions(points) {
-  const selectRutas = document.getElementById("id_ruta");
-  // Limpiar opciones existentes excepto la opción por defecto
-  selectRutas.innerHTML = '<option value="">-- Selecciona una ruta --</option>';
-  try {
-    const res = await fetch(
-      "http://localhost/prueba-tecnica-difasa/api/routes_driver/getRoutes.php"
-    );
-    if (!res.ok) throw new Error("Error al cargar rutas");
-    const points = await res.json();
-
-    points.data.forEach((ruta) => {
-      const option = document.createElement("option");
-      option.value = ruta.id;
-      option.textContent = ruta.nombre;
-      selectRutas.appendChild(option);
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 async function renderDelivery() {
   const endpoint =

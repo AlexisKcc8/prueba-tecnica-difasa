@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   renderRoutes();
+  loadPointSelectOptions();
   document
     .getElementById("form_routes")
     ?.addEventListener("submit", async (e) => {
@@ -7,6 +8,28 @@ document.addEventListener("DOMContentLoaded", () => {
       await addNewRoute();
     });
 });
+
+async function loadPointSelectOptions(points) {
+  const selectRutas = document.getElementById("id_ruta");
+  // Limpiar opciones existentes excepto la opción por defecto
+  selectRutas.innerHTML = '<option value="">-- Selecciona una ruta --</option>';
+  try {
+    const res = await fetch(
+      "http://localhost/prueba-tecnica-difasa/api/routes_driver/getRoutes.php"
+    );
+    if (!res.ok) throw new Error("Error al cargar rutas");
+    const points = await res.json();
+
+    points.data.forEach((ruta) => {
+      const option = document.createElement("option");
+      option.value = ruta.id;
+      option.textContent = ruta.nombre;
+      selectRutas.appendChild(option);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function renderRoutes() {
   const endpoint =
@@ -88,6 +111,7 @@ export async function addNewRoute() {
     if (data.Insertado) {
       alert("Ruta agregada correctamente.");
       renderRoutes();
+      loadPointSelectOptions();
       document.getElementById("nameRoute").value = "";
       document.getElementById("chofer").value = "";
     } else {
@@ -153,6 +177,7 @@ async function updateRoutes(chofer) {
     if (result.Insertado) {
       alert("Ruta actualizada correctamente.");
       renderRoutes();
+      loadPointSelectOptions();
     } else {
       alert("Error al actualizar la ruta.");
     }

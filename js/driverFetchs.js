@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("form_drivers")
     ?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      await addChofer();
+      await addDriver();
     });
 });
 
@@ -72,7 +72,7 @@ async function fetchAndRenderChoferes() {
   }
 }
 
-export async function addChofer() {
+export async function addDriver() {
   const nombre = document.getElementById("driverName").value.trim();
   const telefono = document.getElementById("driverPhone").value.trim();
 
