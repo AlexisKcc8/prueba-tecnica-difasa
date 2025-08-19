@@ -29,6 +29,7 @@ async function loadDriverSelectOptions(choferes) {
     console.error(error);
   }
 }
+
 async function fetchAndRenderChoferes() {
   const endpoint =
     "http://localhost/prueba-tecnica-difasa/api/driver/getDrivers.php";
@@ -61,7 +62,7 @@ async function fetchAndRenderChoferes() {
 
       // Botón editar
       const btnEdit = clone.querySelector(".btn-edit");
-      btnEdit.addEventListener("click", () => editChofer(chofer));
+      btnEdit.addEventListener("click", () => editDriver(chofer));
 
       container.appendChild(clone);
     });
@@ -141,20 +142,17 @@ async function deleteDriver(id) {
   }
 }
 
-/**
- * Muestra un prompt para editar al chofer y lo actualiza
- */
-async function editChofer(chofer) {
+async function editDriver(chofer) {
   const nuevoNombre = prompt("Editar nombre del chofer:", chofer.nombre);
   const nuevoTelefono = prompt("Editar teléfono del chofer:", chofer.telefono);
 
-  if (nuevoNombre === null || nuevoTelefono === null) return; // Cancelado
+  if (nuevoNombre === null || nuevoTelefono === null) return;
 
   try {
     const response = await fetch(
-      "http://localhost/prueba-tecnica-difasa/api/driver/putDriver.php",
+      "http://localhost/prueba-tecnica-difasa/api/driver/putDrivers.php",
       {
-        method: "PUT", // o "PUT" según tu backend
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -167,6 +165,7 @@ async function editChofer(chofer) {
     );
 
     const result = await response.json();
+    console.log(result);
 
     if (result.Insertado) {
       alert("Chofer actualizado correctamente.");

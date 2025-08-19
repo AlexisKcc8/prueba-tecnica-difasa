@@ -105,7 +105,6 @@ export async function addNewDelivery() {
       document.getElementById("id_ruta").value = "";
       document.getElementById("dirrecionRoute").value = "";
       document.getElementById("ordenRoute").value = "";
-      document.getElementById("ruta_entregada").value = "";
     } else {
       alert("Error al agregar ruta: " + (data.message || "Error desconocido."));
     }
@@ -133,7 +132,7 @@ async function editPoint(delivery) {
     const response = await fetch(
       "http://localhost/prueba-tecnica-difasa/api/delivery_points/putDelivery.php",
       {
-        method: "PUT", // o "PUT" según tu backend
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },

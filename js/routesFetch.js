@@ -135,7 +135,7 @@ async function updateRoutes(chofer) {
     const response = await fetch(
       "http://localhost/prueba-tecnica-difasa/api/routes_driver/putRoute.php",
       {
-        method: "PUT", // o "PUT" según tu backend
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
