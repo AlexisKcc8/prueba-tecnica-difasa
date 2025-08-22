@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS puntos_entrega (
   id_ruta INT NOT NULL, 
   direccion VARCHAR(255) NOT NULL, 
   orden INT NOT NULL, 
-  entregado TINYINT(1) NOT NULL DEFAULT 0, 
+  entregado VARCHAR(2) NOT NULL DEFAULT "no", 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   CONSTRAINT fk_stops_route FOREIGN KEY (id_ruta) 
-  REFERENCES rutas(id) 
+  REFERENCES rutas(id) x
   ON DELETE CASCADE 
   ON UPDATE CASCADE, 
   INDEX idx_stops_route_orden (id_ruta, orden) 
